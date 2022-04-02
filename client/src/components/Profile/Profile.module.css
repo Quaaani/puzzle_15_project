@@ -1,0 +1,74 @@
+.profileContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.profileForm {
+  width: 60vh;
+  height: 80vh;
+  border-radius: 10px;
+  border: 2px solid black;
+  margin: 20px;
+  background-color: #917c69;
+  box-shadow: 2px 2px 50px 11px rgba(34, 60, 80, 0.2)
+}
+
+.addProfileForm {
+  width: 60vh;
+  height: 65vh;
+  border-radius: 10px;
+  border: 2px solid black;
+  margin: 20px;
+  background-color: #917c69;
+  box-shadow: 2px 2px 50px 11px rgba(34, 60, 80, 0.2)
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: space-between;
+  height: 60vh;
+}
+
+.inputContainer {
+  width: 40vh;
+  border-radius: 5px;
+  margin: 5px 0;
+  background-color: #bb9f87;
+}
+
+.selectContainer {
+  height: 5vh;
+  width: 40vh;
+  border-radius: 5px;
+  margin: 5px 0;
+  background-color: #bb9f87;
+}
+
+input:focus { 
+  outline: none !important;
+  border-color: black;
+  box-shadow: 0 0 10px #bb9f87;
+}
+
+.buttonContainer {
+  width: 40vh;
+  border-radius: 5px;
+  background-color: #bb9f87;
+}
+
+.buttonContainer:hover {
+  z-index: 10;
+  cursor: pointer;
+  background-color: #9c795a;
+  color: #42372c;
+}
+
+.imgContainer {
+  border-radius: 5px;
+  border: 2px solid black;
+  background-color: #bb9f87;
+  width: 40vh;
+  height: 30vh;
+}
