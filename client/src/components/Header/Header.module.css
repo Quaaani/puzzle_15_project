@@ -1,0 +1,22 @@
+.headerContainer {
+  display: flex;
+  justify-content: space-around;
+  background-color: #917c69;
+  height: 10vh;
+  padding-top: 18px;
+  border-radius: 3px;
+  border: 2px solid black;
+}
+
+.headerText {
+  color:black;
+  text-decoration: 0;
+}
+
+.headerText:hover {
+  transform: scale(1.15);
+  z-index: 10;
+  cursor: pointer;
+  text-decoration: 0;
+  color: #42372c;
+}
