@@ -1,1 +1,1 @@
-puzzle_15_project
+Classic 8-bit styled Puzzle 15 flash game
