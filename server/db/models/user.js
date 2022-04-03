@@ -28,8 +28,13 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.STRING
     },
-    user_photo: {
-      type: DataTypes.TEXT
+    user_sprite: {
+      allowNull: false,
+      type: DataTypes.STRING
+    },
+    user_seed: {
+      allowNull: false,
+      type: DataTypes.INTEGER
     },
     createdAt: {
       allowNull: false,
