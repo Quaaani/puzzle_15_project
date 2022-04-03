@@ -10,6 +10,9 @@ import style from './App.module.css';
 import Main from '../Main/Main';
 import Header from '../Header/Header';
 import Profile from '../Profile/Profile';
+import Game from '../Game/Game';
+import Login from '../Login/Login'
+import Pictures from '../Pictures/Pictures';
 
 function App() {
   return (
@@ -20,8 +23,9 @@ function App() {
         <Routes>
           <Route path="/" element={<Main />} />
           <Route path='/profile' element={<Profile />} />
-          <Route path='/game' element={<Profile />} />
-          <Route path='/pictures' element={<Profile />} />
+          <Route path='/game' element={<Game />} />
+          <Route path='/pictures' element={<Pictures />} />
+          <Route path='/login' element={<Login />} />
           {/* <Route path="*" element={< />} /> */}
         </Routes>
       </BrowserRouter>

@@ -16,8 +16,13 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
-      user_photo: {
-        type: Sequelize.TEXT
+      user_sprite: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
+      user_seed: {
+        allowNull: false,
+        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,

@@ -13,5 +13,16 @@
   box-shadow: 2px 2px 50px 11px rgba(34, 60, 80, 0.2)
 }
 
+.photoContainer {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  height: 60vh;
+  margin-top: 30px;
+}
 
-
+.photo:hover {
+  transform: scale(1.15);
+  z-index: 10;
+  cursor: pointer;
+}

@@ -5,7 +5,7 @@ const sessionConfig = {
  store: new FileStore(),
  name: 'user_sid',
  secret: process.env.SESSION_SECRET ?? 'secret',
- resave: false,
+ resave: true,
  saveUnitialized: false,
  cookie: {
    maxAge: 1000 * 60 * 60,  // 1 hour

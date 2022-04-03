@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express')
-const cors = require('cors');
+// const cors = require('cors');
 const path = require('path')
 const cookieParser = require('cookie-parser')
 const session = require('express-session')
@@ -11,7 +11,7 @@ const config = (app) => {
  app.use(express.json())
  app.use(express.urlencoded({ extended: true }))
  app.use(express.static(path.join(process.env.PWD, 'public')))
- app.use(cors())
+//  app.use(cors())
  
  // session
  app.use(cookieParser())
