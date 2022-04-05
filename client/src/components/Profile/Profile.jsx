@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchAddUser } from '../../redux/asyncActionCreators/usersAAC';
+import { axiosAddUser } from '../../redux/asyncActionCreators/userAAC';
 
 // Стили
 import style from './Profile.module.css';
@@ -27,9 +27,8 @@ function Profile(props) {
   const user_login = useRef();
   const user_password = useRef();
 
-  const { errors } = useSelector((state) => state.errorsReducer);
-  const { users, isLoading, isLoaded, isFailed } = useSelector(
-    (state) => state.usersReducer
+  const { user, isLoading, isLoaded, isFailed } = useSelector(
+    (state) => state.userReducer
   );
 
   const pickAvatar = (event) => {
@@ -51,8 +50,9 @@ function Profile(props) {
     };
 
     try {
-      await dispatch(fetchAddUser(payload));
+      await dispatch(axiosAddUser(payload));
     } catch (error) {
+      console.log('error Profile =>', { ...error })
       setMessage(error.response.data.message);
       setPressed(true);
     }
@@ -61,18 +61,22 @@ function Profile(props) {
   useEffect(() => {
     if (isLoaded) {
       setCheck(true);
-      setMessage(`Welcome, ${users.user_login}!`);
+      setMessage(`Welcome, ${user.user_login}!`);
       setPressed(true);
       setTimeout(() => {
         navigate('/game');
       }, 2000);
+      localStorage.setItem('login', user.user_login)
     }
   }, [isLoaded, setMessage, setCheck, setPressed, navigate]);
+
 
   return (
     <div className={style.profileContainer}>
       <div className={style.profileForm}>
+      
         <Buttons />
+        {/* {!user ?  */}
         <div className={style.profileContainer}>
           <div className={style.addProfileForm}>
             <form onSubmit={sendForm} className={style.formContainer}>
@@ -110,7 +114,7 @@ function Profile(props) {
                     className={style.buttonContainer}
                     disabled={isLoaded}
                   >
-                    Pick avatar
+                    Change avatar
                   </button>
                 </div>
               </div>
@@ -135,7 +139,9 @@ function Profile(props) {
             )}
             {isLoaded && <Spinner />}
           </div>
-        </div>
+        </div> 
+         {/* : <div>No</div>} */}
+        
       </div>
     </div>
   );

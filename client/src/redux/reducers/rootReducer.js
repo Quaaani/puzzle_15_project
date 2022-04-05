@@ -1,10 +1,8 @@
 import { combineReducers } from "redux";
-import { usersReducer } from './usersReducer'
-import { sessionReducer } from "./sessionReducer";
-import { errorsReducer } from './errorsReducer'
+import { userReducer } from './userReducer'
+import { boardReducer } from "./boardReducer";
  
 export const rootReducer = combineReducers({
-  usersReducer,
-  sessionReducer,
-  errorsReducer
+  userReducer,
+  boardReducer
  })

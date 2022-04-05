@@ -1,5 +1,6 @@
 // Инструменты
 import React, { useState } from 'react';
+import axios from 'axios'
 
 // Стили
 import style from './Pictures.module.css';
@@ -10,14 +11,10 @@ import Buttons from '../Buttons/Buttons';
 function Pictures(props) {
   const [url, setUrl] = useState('');
 
-  const toCat = (event) => {
+  const toCat = async (event) => {
     event.preventDefault();
-
-    fetch('http://aws.random.cat/meow')
-      .then((res) => res.json())
-      .then((data) => {
-        setUrl(data.file);
-      });
+    const response = await axios.get('https://api.thecatapi.com/v1/images/search')
+    setUrl(response.data[0].url);
   };
 
   return (

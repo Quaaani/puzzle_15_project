@@ -1,4 +1,4 @@
-import { ADD_USER, DELETE_USER } from '../actionTypes/usersAT'
+import { ADD_USER, DELETE_USER } from '../actionTypes/userAT'
 
 export const addUserAC = (payload) => {
   return {

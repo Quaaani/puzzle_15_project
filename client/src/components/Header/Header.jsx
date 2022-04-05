@@ -1,32 +1,47 @@
 // Инструменты
-import React from 'react';
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteSessionAC } from '../../redux/actionCreators/sessionAC'
-import { deleteUserAC } from '../../redux/actionCreators/usersAC';
+import { axiosCheckUser, axiosDeleteSession } from '../../redux/asyncActionCreators/userAAC'
 
 // Стили
 import style from './Header.module.css';
 
 function Header(props) {
+  const dispatch = useDispatch();
 
-  const dispatch = useDispatch()
-  const { session } = useSelector(state => state.sessionReducer)
+  const { user } = useSelector((state) => state.userReducer);
 
-  const toLogout = () => {
-    fetch('/logout')
-      .then(res => res.json())
-      .then(data => console.log(data))
+  useEffect(async () => {
+    try {
+      await dispatch(axiosCheckUser());
+    } catch (error) {
+      console.log('Error Header =>', error.response.data.message);
+    }
+  }, []);
 
-    dispatch(deleteSessionAC())
-    dispatch(deleteUserAC())
-  }
+  const toLogout = async () => {
+    await dispatch(axiosDeleteSession())
+  };
 
   return (
     <div className={style.headerContainer}>
-      <Link to={'/'} className={style.headerText}>Puzzle 15</Link>
-      {session.user_login && <div className={style.headerText}>{session.user_login}</div>}
-      {session.user_login ? <div onClick={toLogout} className={style.headerText}>Logout</div> : <Link to={'/login'} className={style.headerText}>Login</Link>} 
+      <Link to={'/'} className={style.headerText}>
+        Puzzle 15
+      </Link>
+      <Link to={'/example'} className={style.headerText}>Example</Link>
+      {user && (
+        <Link to={'/game'} className={style.headerText}>{user.user_login}</Link>
+      )}
+      {user ? (
+        <div onClick={toLogout} className={style.headerText}>
+          Logout
+        </div>
+      ) : (
+        <Link to={'/login'} className={style.headerText}>
+          Login
+        </Link>
+      )}
     </div>
   );
 }

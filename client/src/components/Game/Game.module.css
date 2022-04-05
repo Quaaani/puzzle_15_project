@@ -68,10 +68,10 @@
   background-color: #9c795a;
   color: #42372c;
 }
-
+/* 
 .boxContainer {
   height: 45vh;
-  width: 100%vh;
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -81,7 +81,7 @@
   border-radius: 5px;
   padding-bottom: 5px;
   background-color: #bb9f87;
-}
+} */
 
 .playBoxContainer {
   height: 10vh;
@@ -109,4 +109,16 @@
   cursor: pointer;
   background-color: #9c795a;
   color: #42372c;
+}
+
+.boxContainer {
+  margin: 10px;
+  border: 2px solid black;
+  border-radius: 5px;
+  display: flex;
+  flex-wrap: wrap;
+  padding-top: 2px;
+  height: 291px;
+  width: 56vh;
+  background-color: #bb9f87;
 }

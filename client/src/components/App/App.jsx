@@ -1,7 +1,8 @@
 // Инструменты
 import { store } from '../../redux/store';
-import { Provider } from 'react-redux';
+import { Provider, useDispatch } from 'react-redux';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { useEffect } from 'react';
 
 // Стили
 import style from './App.module.css';
@@ -13,6 +14,7 @@ import Profile from '../Profile/Profile';
 import Game from '../Game/Game';
 import Login from '../Login/Login'
 import Pictures from '../Pictures/Pictures';
+import Example from '../Example/Example'
 
 function App() {
   return (
@@ -26,6 +28,7 @@ function App() {
           <Route path='/game' element={<Game />} />
           <Route path='/pictures' element={<Pictures />} />
           <Route path='/login' element={<Login />} />
+          {/* <Route path='/example' element={<Example />} /> */}
           {/* <Route path="*" element={< />} /> */}
         </Routes>
       </BrowserRouter>

@@ -1,0 +1,18 @@
+.boxContainer {
+  width: 77px;
+  height: 64px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid black;
+  border-radius: 5px;
+  margin: 3px;
+  background-color: #917c69;
+}
+
+.boxContainer:hover {
+  z-index: 10;
+  cursor: pointer;
+  background-color: #9c795a;
+  color: #42372c;
+}

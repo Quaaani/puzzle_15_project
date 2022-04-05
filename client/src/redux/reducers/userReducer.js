@@ -1,7 +1,7 @@
-import { ADD_USER, DELETE_USER } from '../actionTypes/usersAT'
-const initialState = { users: null, isLoading: false, isLoaded: false, isFailed: false }
+import { ADD_USER, DELETE_USER } from '../actionTypes/userAT'
+const initialState = { user: null, isLoading: false, isLoaded: false, isFailed: false }
 
-export const usersReducer = (state = initialState, action) => {
+export const userReducer = (state = initialState, action) => {
   switch (action.type) {
 
     case 'LOADING': 
@@ -13,8 +13,8 @@ export const usersReducer = (state = initialState, action) => {
     case 'FAILED': 
       return { ...state, isFailed: action.payload }
 
-    case ADD_USER:
-      return { ...state, users: action.payload }
+    case ADD_USER: 
+      return { ...state, user: action.payload }
 
     case DELETE_USER:
       return initialState
