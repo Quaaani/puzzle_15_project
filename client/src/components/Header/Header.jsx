@@ -3,6 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteSessionAC } from '../../redux/actionCreators/sessionAC'
+import { deleteUserAC } from '../../redux/actionCreators/usersAC';
 
 // Стили
 import style from './Header.module.css';
@@ -18,6 +19,7 @@ function Header(props) {
       .then(data => console.log(data))
 
     dispatch(deleteSessionAC())
+    dispatch(deleteUserAC())
   }
 
   return (

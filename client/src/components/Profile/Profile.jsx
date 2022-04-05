@@ -1,9 +1,8 @@
 // Инструменты
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { addUserAC } from '../../redux/actionCreators/usersAC'
-import { initSessionAC } from '../../redux/actionCreators/sessionAC';
+import { fetchAddUser } from '../../redux/asyncActionCreators/usersAAC';
 
 // Стили
 import style from './Profile.module.css';
@@ -11,21 +10,27 @@ import style from './Profile.module.css';
 // Компоненты
 import Buttons from '../Buttons/Buttons';
 import Alert from '../Alert/Alert';
+import Spinner from '../Spinner/Spinner';
 
 function Profile(props) {
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [sprite, setSprite] = useState('male');
   const [seed, setSeed] = useState(0);
 
-  const [check, setCheck] = useState(false)
-  const [pressed, setPressed] = useState(false)
-  const [message, setMessage] = useState('')
+  const [check, setCheck] = useState(false);
+  const [pressed, setPressed] = useState(false);
+  const [message, setMessage] = useState('');
 
   const spriteValue = useRef();
   const user_login = useRef();
   const user_password = useRef();
+
+  const { errors } = useSelector((state) => state.errorsReducer);
+  const { users, isLoading, isLoaded, isFailed } = useSelector(
+    (state) => state.usersReducer
+  );
 
   const pickAvatar = (event) => {
     event.preventDefault();
@@ -35,42 +40,34 @@ function Profile(props) {
     setSeed(num);
   };
 
-  const sendForm = (event) => {
+  const sendForm = async (event) => {
     event.preventDefault();
 
-    fetch('/profile', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        user_login: user_login.current.value,
-        user_password: user_password.current.value,
-        user_sprite: sprite,
-        user_seed: seed,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => { 
-        if (data.status === 400) {
-          setCheck(false)
-          setMessage(data.message)
-          setPressed(true)
-        } else {
-          dispatch(addUserAC(data.data))
-          dispatch(initSessionAC(data.data))
+    const payload = {
+      user_login: user_login.current.value,
+      user_password: user_password.current.value,
+      user_sprite: sprite,
+      user_seed: seed,
+    };
 
-          setCheck(true)
-          setMessage(data.message)
-          setPressed(true)
-
-          setTimeout(() => {
-            navigate('/game')
-          }, 2000);
-        }
-      })
-      .catch(err => console.log('Error =>', err.message))
-    
-
+    try {
+      await dispatch(fetchAddUser(payload));
+    } catch (error) {
+      setMessage(error.response.data.message);
+      setPressed(true);
+    }
   };
+
+  useEffect(() => {
+    if (isLoaded) {
+      setCheck(true);
+      setMessage(`Welcome, ${users.user_login}!`);
+      setPressed(true);
+      setTimeout(() => {
+        navigate('/game');
+      }, 2000);
+    }
+  }, [isLoaded, setMessage, setCheck, setPressed, navigate]);
 
   return (
     <div className={style.profileContainer}>
@@ -87,6 +84,7 @@ function Profile(props) {
                   name="user_login"
                   placeholder="Login"
                   autoComplete="off"
+                  disabled={isLoaded}
                 ></input>
                 <input
                   ref={user_password}
@@ -95,9 +93,14 @@ function Profile(props) {
                   name="user_password"
                   placeholder="Password"
                   autoComplete="off"
+                  disabled={isLoaded}
                 ></input>
                 <div>
-                  <select ref={spriteValue} className={style.selectContainer}>
+                  <select
+                    ref={spriteValue}
+                    className={style.selectContainer}
+                    disabled={isLoaded}
+                  >
                     <option value="male">Male</option>
                     <option value="female">Female</option>
                     <option value="human">Human</option>
@@ -105,6 +108,7 @@ function Profile(props) {
                   <button
                     onClick={pickAvatar}
                     className={style.buttonContainer}
+                    disabled={isLoaded}
                   >
                     Pick avatar
                   </button>
@@ -117,12 +121,19 @@ function Profile(props) {
                 />
               </div>
               <div>
-                <button className={style.buttonContainer} type="submit">
+                <button
+                  className={style.buttonContainer}
+                  type="submit"
+                  disabled={isLoaded}
+                >
                   Create
                 </button>
               </div>
             </form>
-            {pressed && <Alert check={check} message={message}/>}
+            {(isLoaded || isFailed) && (
+              <Alert check={check} message={message} />
+            )}
+            {isLoaded && <Spinner />}
           </div>
         </div>
       </div>
