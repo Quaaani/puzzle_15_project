@@ -1,0 +1,7 @@
+export const INIT_BOARD = 'INIT_BOARD'
+export const INIT_MATRIX = 'INIT_MATRIX'
+export const FIND_EMPTY = 'FIND_EMPTY'
+export const FIND_PRESSED = 'FIND_PRESSED'
+export const AVAILABLE = 'AVAILABLE'
+export const CHECK_BOARD = 'CHECK_BOARD'
+export const INIT_SAVED_BOARD = 'INIT_SAVED_BOARD'

@@ -8,8 +8,11 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      game_position: {
+      game_board: {
         type: Sequelize.TEXT
+      },
+      game_moves: {
+        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,

@@ -1,7 +1,8 @@
 // Инструменты
 import { store } from '../../redux/store';
-import { Provider } from 'react-redux';
+import { Provider, useDispatch } from 'react-redux';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { useEffect } from 'react';
 
 // Стили
 import style from './App.module.css';
