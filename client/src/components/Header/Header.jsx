@@ -29,7 +29,7 @@ function Header(props) {
       <Link to={'/'} className={style.headerText}>
         Puzzle 15
       </Link>
-      <Link to={'/example'} className={style.headerText}>Example</Link>
+      {/* <Link to={'/example'} className={style.headerText}>Example</Link> */}
       {user && (
         <Link to={'/game'} className={style.headerText}>{user.user_login}</Link>
       )}

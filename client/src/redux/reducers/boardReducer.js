@@ -4,10 +4,19 @@ import {
   FIND_EMPTY,
   FIND_PRESSED,
   AVAILABLE,
+  CHECK_BOARD,
+  INIT_SAVED_BOARD,
 } from '../actionTypes/boardAT';
 
-const board = [];
+// while (board.length < 15) {
+//   const num = Math.floor(Math.random() * 16);
+//   if (!board.includes(num)) board.push(num);
+// }
 
+// const board = new Array(16).fill(0).map((x, index) => index).sort(() => Math.random() - 0.5);
+
+// Создание случайного порядка
+const board = [];
 for (let i = 0; i < 16; i++) {
   function randomNum() {
     const num = Math.floor(Math.random() * 16);
@@ -17,101 +26,100 @@ for (let i = 0; i < 16; i++) {
   board.push(randomNum());
 }
 
-// while (board.length < 15) {
-//   const num = Math.floor(Math.random() * 16);
-//   if (!board.includes(num)) board.push(num);
-// }
+// Создание матрицы
+const matrix = [];
+for (let j = 0; j < 16; j += 4) {
+  let tempArr = [board[j], board[j + 1], board[j + 2], board[j + 3]];
+  matrix.push(tempArr);
+}
 
-// const board = new Array(16).fill(0).map((x, index) => index).sort(() => Math.random() - 0.5);
-
-const initialState = { board };
+const initialState = { board, matrix, solved: false, moves: 0 };
 
 export const boardReducer = (state = initialState, action) => {
   switch (action.type) {
-    case INIT_BOARD:
-      return initialState;
+    case INIT_SAVED_BOARD: {
+      const { game_board, game_moves } = action.payload;
+      const board = game_board.split('_').map((el) => +el);
 
-    case INIT_MATRIX: {
-      const temp = [];
-
+      const matrix = [];
       for (let j = 0; j < 16; j += 4) {
         let tempArr = [board[j], board[j + 1], board[j + 2], board[j + 3]];
-        temp.push(tempArr);
+        matrix.push(tempArr);
       }
 
-      return { ...state, matrix: temp };
+      return { ...state, board, matrix, moves: game_moves };
+    }
+
+    case INIT_BOARD: {
+      return { ...state };
     }
 
     case FIND_EMPTY: {
-      const temp = [];
-
+      // Поиск пустой ячейки
+      const empty = [];
       for (let i = 0; i < 4; i++) {
         for (let j = 0; j < 4; j++) {
           if (state.matrix[i][j] === 0) {
-            temp.push(i, j);
+            empty.push(i, j);
           }
         }
       }
-
-      return { ...state, empty: temp };
+      return { ...state, empty };
     }
 
     case FIND_PRESSED: {
-      const temp = [];
+      // Поиск нажатой ячейки
+      const pressed = [];
 
       for (let i = 0; i < 4; i++) {
         for (let j = 0; j < 4; j++) {
           if (state.matrix[i][j] === action.payload) {
-            temp.push(i, j);
+            pressed.push(i, j);
           }
         }
       }
 
-      return { ...state, pressed: temp };
-    }
-
-    case AVAILABLE: {
-      let bool = false;
-      const [eA, eB] = state.empty;
-      const [a, b] = action.payload;
-      const res = [
-        [eA - 1, eB],
-        [eA + 1, eB],
-        [eA, eB - 1],
-        [eA, eB + 1],
+      // Проверка на валидность
+      const [pressedX, pressedY] = pressed;
+      const [emptyX, emptyY] = state.empty;
+      const availables = [
+        [emptyX - 1, emptyY],
+        [emptyX + 1, emptyY],
+        [emptyX, emptyY - 1],
+        [emptyX, emptyY + 1],
       ];
 
-      let result = []
+      // Смена позиций
+      let newBoard = [];
+      for (let i = 0; i < availables.length; i++) {
+        const [tempX, tempY] = availables[i];
 
-      res.forEach((el, ind) => {
-        const [a, b] = el;
-        const [c, d] = action.payload;
-        
-
-        if (a === c && b === d) {
-          bool = true;
-          const [x, y] = el;
-          const [eX, eY] = state.empty;
-
+        if (tempX === pressedX && tempY === pressedY) {
           for (let i = 0; i < 4; i++) {
             for (let j = 0; j < 4; j++) {
-              if (i === x && j === y) {
-                console.log('value default =>', state.matrix[eX][eY]);
-                console.log('value pressed =>', state.matrix[x][y]);
-                state.matrix[eX][eY] = state.matrix[x][y];
-                state.matrix[x][y] = 0;
-                result = state.matrix.flat()
-                console.log('board =>', state.board)
-                console.log('res =>', res)
+              if (i === tempX && j === tempY) {
+                state.matrix[emptyX][emptyY] = state.matrix[pressedX][pressedY];
+                state.matrix[pressedX][pressedY] = 0;
+                newBoard = state.matrix.flat();
+                return { ...state, board: newBoard, moves: state.moves + 1 };
               }
             }
           }
         }
-      });
+      }
 
-      console.log('FINALL =>', result)
+      return { ...state };
+    }
 
-      return { ...state, board: result }
+    case CHECK_BOARD: {
+      const trueBoard = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0];
+      const board = state.board;
+
+      let x = trueBoard.every((el, ind) => board[ind] === el);
+      let y = board.every((el, ind) => trueBoard[ind] === el);
+
+      if (x + y) return { ...state, solved: true };
+      return { ...state, solved: false };
     }
 
     default:

@@ -12,7 +12,6 @@ function Box({ num, ind }) {
 
   const toPress = () => {
     dispatch(findPressedAC(num))
-    dispatch(availableAC(pressed))
   }
 
   return (

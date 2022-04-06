@@ -1,4 +1,4 @@
-import { INIT_BOARD, INIT_MATRIX, FIND_EMPTY, FIND_PRESSED, AVAILABLE } from '../actionTypes/boardAT'
+import { INIT_BOARD, INIT_MATRIX, FIND_EMPTY, FIND_PRESSED, AVAILABLE, CHECK_BOARD, INIT_SAVED_BOARD } from '../actionTypes/boardAT'
 
 export const initBoardAC = () => {
   return {
@@ -28,6 +28,19 @@ export const findPressedAC = (payload) => {
 export const availableAC = (payload) => {
   return {
     type: AVAILABLE,
+    payload
+  }
+}
+
+export const checkBoardAC = () => {
+  return {
+    type: CHECK_BOARD,
+  }
+}
+
+export const initSavedBoardAC = (payload) => {
+  return {
+    type: INIT_SAVED_BOARD,
     payload
   }
 }

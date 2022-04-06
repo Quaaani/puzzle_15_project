@@ -20,8 +20,11 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       type: DataTypes.INTEGER
     },
-    game_position: {
+    game_board: {
       type: DataTypes.TEXT
+    },
+    game_moves: {
+      type: DataTypes.INTEGER
     },
     createdAt: {
       allowNull: false,

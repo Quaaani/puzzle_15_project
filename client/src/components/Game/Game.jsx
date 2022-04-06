@@ -2,7 +2,9 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { findEmptyAC, initBoardAC, initMatrixAC } from '../../redux/actionCreators/boardAC';
+import { checkBoardAC, findEmptyAC, initBoardAC, initMatrixAC } from '../../redux/actionCreators/boardAC';
+import { axiosSaveBoard } from '../../redux/asyncActionCreators/saveAAC'
+import { axiosInitSavedBoard } from '../../redux/asyncActionCreators/boardAAC'
 
 // Стили
 import style from './Game.module.css';
@@ -15,17 +17,41 @@ const Game = (props) => {
   const dispatch = useDispatch();
 
   const { user } = useSelector((state) => state.userReducer);
-  const { board, matrix, empty } = useSelector((state) => state.boardReducer);
-
+  const { board, solved, moves } = useSelector((state) => state.boardReducer);
+  
   useEffect(() => {
     dispatch(initBoardAC());
-    dispatch(initMatrixAC())
     dispatch(findEmptyAC())
-  }, [dispatch]);
+    dispatch(checkBoardAC())
+  }, [dispatch, board, moves]);
+  
+  const toSave = async (event) => {
+    event.preventDefault()
 
-  console.log('board GAME =>', board);
-  console.log('matrix GAME =>', matrix)
-  console.log('empty GAME =>', empty)
+    const tempBoard = board.join('_')
+
+    const payload = {
+      game_board: tempBoard,
+      game_moves: moves
+    }
+
+    try {
+      await dispatch(axiosSaveBoard(payload))
+    } catch (error) {
+      console.log('save board Error =>', { ...error })
+    }
+
+  }
+
+  const toLoad = async (event) => {
+    event.preventDefault()
+
+    try {
+      await dispatch(axiosInitSavedBoard())
+    } catch (error) {
+      console.log('load board Error =>', { ...error })
+    }
+  }
 
   return (
     <div className={style.gameContainer}>
@@ -40,15 +66,23 @@ const Game = (props) => {
               />
               <div className={style.profileInfo}>
                 <div>{user.user_login}</div>
-                <div>Moves: 0</div>
-                <button className={style.buttonTextContainer}>Save</button>
+                <div>Moves: {moves}</div>
+                <div>
+                <button onClick={toSave} className={style.buttonTextContainer} style={{marginRight: '10px'}}>Save</button>
+                <button onClick={toLoad} className={style.buttonTextContainer}>Load</button>
+                </div>
               </div>
             </div>
             <div className={style.boxContainer}>
-              {board.length ? (
+              {!solved ? (
                 board.map((num, ind) => <Box key={ind} num={num} ind={ind} />)
               ) : (
-                <div>No data</div>
+                <div className={style.congratulationsContainer}>
+                  <div className={style.congratzText}>
+                    <div>Congratulations!</div>
+                    <div>Total moves: {moves}</div>
+                  </div>
+                </div>
               )}
             </div>
           </div>
